@@ -14,7 +14,7 @@ export default function Login() {
       .nonempty({ message: "Email is required" }),
     password: z
       .string()
-      .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, {
+      .regex(/^(?=.*[A-Za-z])(?=.*\d).{8,}$/, {
         message:
           "Password must be at least 8 characters and contain at least one letter and one number",
       })
@@ -45,47 +45,50 @@ export default function Login() {
         localStorage.setItem("token" , data.token);
         navigate("/");
       }
-    } catch (error) {
-      if (error.response) {
-        setError("apiError", { message: error.response.data.error });
-      } else {
-        setError("apiError", { message: "Error to conect server" });
-      }
-    }
+  } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Failed to connect to server";
+      setError("apiError", { message: errorMessage });
+  }
   }
 
   return (
-    <div className="w-[50%] mx-auto shadow-xl p-5 my-6 rounded-2xl">
-      <h1 className="text-3xl text-sky-800 text-semibold">Login Now</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="my-6">
-        <input
-          {...register("email")}
-          type="email"
-          placeholder="Type Your Email"
-          className="input w-full mb-5"
-        />
-        {errors.email && (
-          <p className="text-red-600 mb-4">{errors.email.message}</p>
-        )}
-        <input
-          {...register("password")}
-          type="password"
-          placeholder="Type Your Password"
-          className="input w-full mb-5"
-        />
-        {errors.password && (
-          <p className="text-red-600 mb-4">{errors.password.message}</p>
-        )}
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
+      <div className="w-[50%] mx-auto shadow-xl p-5 rounded-2xl">
+        <h1 className="text-3xl text-sky-800 text-semibold">Login Now</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="my-6">
+          <input
+            {...register("email")}
+            type="email"
+            placeholder="Type Your Email"
+            className="input w-full mb-5"
+          />
+          {errors.email && (
+            <p className="text-red-600 mb-4">{errors.email.message}</p>
+          )}
+          <input
+            {...register("password")}
+            type="password"
+            placeholder="Type Your Password"
+            className="input w-full mb-5"
+          />
+          {errors.password && (
+            <p className="text-red-600 mb-4">{errors.password.message}</p>
+          )}
 
-        {errors.apiError && (
-          <div className="text-red-600 mb-4 text-center">
-            {errors.apiError.message}
-          </div>
-        )}
-        <button className="text-stone-200 bg-sky-700 px-6 py-3 rounded-xl cursor-pointer hover:bg-sky-900">
-          {isSubmitting ? "Loading..." : "Sign In"}
-        </button>
-      </form>
+          {errors.apiError && (
+            <div className="text-red-600 mb-4 text-center">
+              {errors.apiError.message}
+            </div>
+          )}
+          <button className="text-stone-200 bg-sky-700 px-6 py-3 rounded-xl cursor-pointer hover:bg-sky-900">
+            {isSubmitting ? "Loading..." : "Sign In"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function Register() {
       password: z
         .string()
         .regex(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+          /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
           {
             message:
               "Password must be at least 8 characters and contain at least one letter and one number",
@@ -31,7 +31,7 @@ export default function Register() {
       dateOfBirth: z
         .string()
         .nonempty({ message: "Date of birth is required" }),
-      gender: z.enum(["male", "female"], "Gender is required"),
+      gender: z.enum(["male", "female"], { required_error: "Gender is required" }),
     })
     .refine((data) => data.password === data.rePassword, {
       message: "Passwords don't match",
@@ -59,25 +59,31 @@ export default function Register() {
       if (data.message == "success") {
         navigate('/login')
       }
-    } catch (err) {
-      setError('root' , {message : error.response.data.error})
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Failed to register";
+      setError('apiError' , { message: errorMessage })
     }
   }
 
   return (
-    <div className="w-[50%] mx-auto shadow-xl p-5 my-6 rounded-2xl">
-      <h1 className="text-3xl text-sky-800 text-semibold">Register Now</h1>
-      <p></p>
-      <form onSubmit={handleSubmit(onSubmit)} className="my-4">
-        <input
-          {...register("name")}
-          type="text"
-          className="input w-full mb-5"
-          placeholder="Enter your name"
-        />
-        {errors.name && (
-          <p className="text-red-600 mb-4">{errors.name.message}</p>
-        )}
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
+      <div className="w-[50%] mx-auto shadow-xl p-5 rounded-2xl">
+        <h1 className="text-3xl text-sky-800 text-semibold">Register Now</h1>
+        <p></p>
+        <form onSubmit={handleSubmit(onSubmit)} className="my-4">
+          <input
+            {...register("name")}
+            type="text"
+            className="input w-full mb-5"
+            placeholder="Enter your name"
+          />
+          {errors.name && (
+            <p className="text-red-600 mb-4">{errors.name.message}</p>
+          )}
         <input
           {...register("email")}
           type="email"
@@ -100,7 +106,7 @@ export default function Register() {
           {...register("rePassword")}
           type="password"
           className="input w-full mb-5"
-          placeholder="Comfirm your password"
+          placeholder="Confirm your password"
         />
         {errors.rePassword && (
           <p className="text-red-600 mb-4">{errors.rePassword.message}</p>
@@ -143,16 +149,17 @@ export default function Register() {
           <p className="text-red-600 mb-4">{errors.gender.message}</p>
         )}
 
-        {errors.root && (
+        {errors.apiError && (
           <div className="text-red-600 mb-4 text-center">
             {errors.apiError.message}
           </div>
         )}
 
         <button className="text-stone-200 bg-sky-700 px-6 py-3 rounded-xl cursor-pointer hover:bg-sky-900">
-          {isSubmitting ? "Loading" : "SignUp"}
+          {isSubmitting ? "Loading..." : "Sign Up"}
         </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

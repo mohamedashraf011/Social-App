@@ -18,10 +18,9 @@ export default function Home() {
     return <div className="text-white text-center mt-10">{error.message}</div>;
 
   return (
-    
     <div className="min-h-screen py-10 px-4 text-white bg-gray-900 flex flex-col items-center shadow-2xl">
       <CreatePost />
-      
+
       {data?.map((post) => (
         <Link
           key={post._id}

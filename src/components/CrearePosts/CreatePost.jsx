@@ -47,7 +47,7 @@ export default function CreatePost() {
   return (
     <>
       {isPending && toast.info("Adding Post...")}
-      <div className="w-[50%] bg-gray-800 rounded-2xl shadow-xl my-8 border border-gray-700 overflow-hidden">
+      <div className="w-full max-w-3xl bg-gray-800 rounded-2xl shadow-xl my-8 border border-gray-700 overflow-hidden">
         <div className="p-4">
           <textarea
             className="w-full bg-gray-700 text-white rounded-xl p-4 resize-none border border-gray-600 focus:outline-none focus:border-blue-500"

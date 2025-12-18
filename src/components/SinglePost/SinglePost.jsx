@@ -39,7 +39,7 @@ export default function SinglePost({
   };
 
   return (
-    <div className="w-[50%] bg-gray-800 rounded-2xl shadow-xl my-8 border border-gray-700 overflow-hidden">
+    <div className="w-full max-w-3xl bg-gray-800 rounded-2xl shadow-xl my-8 border border-gray-700 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between gap-4 p-4">
         <div className="flex items-center gap-4">

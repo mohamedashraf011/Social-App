@@ -34,7 +34,6 @@ export default function Login() {
   const { setToken } = useContext(TokenContext);
 
   async function onSubmit(values) {
-
     try {
       const { data } = await axios.post(
         "https://linked-posts.routemisr.com/users/signin",
@@ -42,53 +41,62 @@ export default function Login() {
       );
       if (data.message === "success") {
         setToken(data.token);
-        localStorage.setItem("token" , data.token);
+        localStorage.setItem("token", data.token);
         navigate("/");
       }
-  } catch (error) {
+    } catch (error) {
       const errorMessage =
         error?.response?.data?.message ||
         error?.response?.data?.error ||
         error?.message ||
         "Failed to connect to server";
       setError("apiError", { message: errorMessage });
-  }
+    }
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
-      <div className="w-[50%] mx-auto shadow-xl p-5 rounded-2xl">
-        <h1 className="text-3xl text-sky-800 text-semibold">Login Now</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="my-6">
-          <input
-            {...register("email")}
-            type="email"
-            placeholder="Type Your Email"
-            className="input w-full mb-5"
-          />
-          {errors.email && (
-            <p className="text-red-600 mb-4">{errors.email.message}</p>
-          )}
-          <input
-            {...register("password")}
-            type="password"
-            placeholder="Type Your Password"
-            className="input w-full mb-5"
-          />
-          {errors.password && (
-            <p className="text-red-600 mb-4">{errors.password.message}</p>
-          )}
+  <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
+    <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl shadow-xl p-6 sm:p-8 md:p-10 rounded-2xl bg-white">
+      <h1 className="text-3xl text-sky-800 font-semibold text-center mb-6">
+        Login Now
+      </h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <input
+          {...register("email")}
+          type="email"
+          placeholder="Type Your Email"
+          className="input w-full mb-5"
+        />
+        {errors.email && (
+          <p className="text-red-600 mb-4">{errors.email.message}</p>
+        )}
 
-          {errors.apiError && (
-            <div className="text-red-600 mb-4 text-center">
-              {errors.apiError.message}
-            </div>
-          )}
-          <button className="text-stone-200 bg-sky-700 px-6 py-3 rounded-xl cursor-pointer hover:bg-sky-900">
-            {isSubmitting ? "Loading..." : "Sign In"}
-          </button>
-        </form>
-      </div>
+        <input
+          {...register("password")}
+          type="password"
+          placeholder="Type Your Password"
+          className="input w-full mb-5"
+        />
+        {errors.password && (
+          <p className="text-red-600 mb-4">{errors.password.message}</p>
+        )}
+
+        {errors.apiError && (
+          <div className="text-red-600 mb-4 text-center">
+            {errors.apiError.message}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-sky-700 text-stone-200 px-6 py-3 rounded-xl hover:bg-sky-900 transition-colors duration-300"
+        >
+          {isSubmitting ? "Loading..." : "Sign In"}
+        </button>
+      </form>
     </div>
+  </div>
+
   );
 }

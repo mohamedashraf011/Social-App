@@ -56,7 +56,7 @@ export default function Login() {
 
   return (
   <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
-    <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl shadow-xl p-6 sm:p-8 md:p-10 rounded-2xl bg-white">
+    <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 sm:p-8 md:p-10 rounded-3xl shadow-2xl">
       <h1 className="text-3xl text-sky-800 font-semibold text-center mb-6">
         Login Now
       </h1>
@@ -90,13 +90,12 @@ export default function Login() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-sky-700 text-stone-200 px-6 py-3 rounded-xl hover:bg-sky-900 transition-colors duration-300"
+          className="w-full bg-sky-700 text-stone-200 px-6 py-2 rounded-2xl hover:bg-sky-900 transition-colors duration-300 cursor-pointer"
         >
           {isSubmitting ? "Loading..." : "Sign In"}
         </button>
       </form>
     </div>
   </div>
-
   );
 }
